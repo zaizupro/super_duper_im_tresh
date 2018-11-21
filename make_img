@@ -1,0 +1,38 @@
+#!/bin/bash
+
+FILENAME="out.png"
+MAXX=20
+MAXY=10
+
+ENDING=' -scale '$((${MAXX}*2))'x'$((${MAXY}*2))' \
+        -resize 400% \
+        '$FILENAME
+
+STARTING=' -size '${MAXX}'x'${MAXY}' xc:black \
+        -fill red \
+        -draw "rectangle 0,0 '${MAXX}','${MAXY}'" \
+        -fill black \
+        -draw "rectangle 1,1 $(('${MAXX}'-2)),$(('${MAXY}'-2))" \
+        -fill red '
+
+## TODO make funk
+for i in {0..50}; do
+    PIKCHA=$PIKCHA' -draw "color '$(shuf -i 0-$(($MAXX-1)) -n 1)','$(shuf -i 0-$(($MAXY-1)) -n 1)' point" '
+done
+
+## TODO make funk
+for i in {0..5}; do
+    X1=$(shuf -i 0-$(($MAXX-1)) -n 1)
+    Y1=$(shuf -i 0-$(($MAXX-1)) -n 1)
+    Y2=$(shuf -i 0-$(($MAXY-1)) -n 1)
+    Y1=0;Y2=$(($MAXY-1))
+    PIKCHA=$PIKCHA' -draw "line '$X1','$Y1' '$X1','$Y2'" '
+done
+
+CMND='convert '$STARTING' \
+    '$PIKCHA' \
+    '$ENDING
+
+bash -c "$CMND"
+
+
